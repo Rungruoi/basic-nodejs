@@ -4,6 +4,8 @@ const Employee = require('../model/employee');
 const { sendWelcome } = require('../mails/config')
 
 router.get('/', async (req, res) => {
+  const resPerPage = 5; // results per page
+  const page = req.query.page || 1; // Page 
 
   if(req.query.name) {
     let name = req.query.name
@@ -12,9 +14,15 @@ router.get('/', async (req, res) => {
       employees,
     });
   } else {
-    const employees = await Employee.find();
+    const employees = await Employee.find().skip((resPerPage * page) - resPerPage)
+    .limit(resPerPage)
+    const numberOfEmployee = await Employee.count()
+    
     res.render('index', {
-      employees,
+      employees: employees,
+      currentPage: page, 
+      pages: Math.ceil (numberOfEmployee / resPerPage), 
+      numOfResults: numberOfEmployee
     });
    }
 });
