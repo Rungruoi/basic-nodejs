@@ -1,0 +1,75 @@
+<% include partials/_header %>
+
+<div class="container">
+  <div class="row">
+      <div class="col-md-12">
+          <div class="card">
+              <div class="card-header">Search</div>
+              <div class="card-body">
+                <form action="/" method="GET" class="pd-4">
+                  <div class="row align-items-center">
+                    
+                    <div class="col-md-4 col-sm-12">
+                        <label class="col-form-label ">Name</label>
+                          <input class="form-control" placeholder="Enter Name" name="name" type="text" value="<%=  %>">
+                    </div>
+                    
+                    <div class="col-md-12 col-sm-12 kt-margin-t-15">
+                        <button type="submit" class="btn btn-success">
+                            <i class="fa fa-search"></i>Tìm kiếm
+                        </button>
+                    </div>
+                  </div>
+                </form>
+                  
+              </div>
+          </div>
+      </div>
+  
+    <!-- LIST -->
+    <div class="col-md-12">
+      
+      
+      <a href="/create" class="btn btn-success">New</a>
+      <table class="table table-bordered table-hover">
+        <thead>
+          <tr>
+            <th>Ref</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Adress</th>
+            <th>Status</th>
+            <th>Operations</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% for(var i=0; i < employees.length; i++) { %>
+            <tr>
+              <td><%= i + 1%></td>
+              <td><strong><%= employees[i].name %></strong></td>
+              <td><%= employees[i].email %></td>
+              <td><%= employees[i].phone %></td>
+              <td><%= employees[i].address %></td>
+              <td><a
+                class="<%= employees[i].status ? 'btn btn-success' : 'btn btn-dark'%>"
+                href="/turn/<%= employees[i]._id %>"><%= employees[i].status ? "Active" : "Inactive" %></a></td>
+              <td>
+                <a href="/edit/<%= employees[i]._id %>" class="btn btn-info">
+                  Edit
+                </a>
+                <a href="/delete/<%= employees[i]._id %>"
+                  class="btn btn-danger">
+                  Delete
+                </a>
+              </td>
+            </tr>
+          <% } %>
+        </tbody>
+      </table>
+      <!--  -->
+    </div>
+  </div>
+
+</div>
+
