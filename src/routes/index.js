@@ -9,9 +9,14 @@ router.get('/', async (req, res) => {
 
   if(req.query.name) {
     let name = req.query.name
-    const employees = await Employee.find({'name': {'$regex': name}});
+    const employees = await Employee.find({'name': {'$regex': name}}).skip((resPerPage * page) - resPerPage)
+    .limit(resPerPage)
+    const numberOfEmployee = await Employee.count({'name': {'$regex': name}});
     res.render('index', {
-      employees,
+      employees: employees,
+      currentPage: page, 
+      pages: Math.ceil (numberOfEmployee / resPerPage), 
+      numOfResults: numberOfEmployee
     });
   } else {
     const employees = await Employee.find().skip((resPerPage * page) - resPerPage)
