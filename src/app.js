@@ -2,14 +2,15 @@ const path = require('path');
 const express = require('express');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
-require('dotenv').config();
 const app = express();
+require('dotenv').config();
 
 // connection to db
 mongoose.connect(process.env.MONGO_DB)
-  .then(db => console.log('db connected'))
+  .then(db => console.log('db connected true'))
   .catch(err => console.log(err));
 
+app.use(express.static(path.join(__dirname, 'public')));
 // importing routes
 const indexRoutes = require('./routes/index');
 
@@ -17,6 +18,7 @@ const indexRoutes = require('./routes/index');
 const port =  process.env.PORT;
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
+
 
 // middlewares
 app.use(morgan('dev'));
