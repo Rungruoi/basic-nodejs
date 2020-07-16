@@ -10,12 +10,15 @@ const EmployeeSchema = new mongoose.Schema({
   phone: {
         type: String
   },
+  avatar: {
+    type: String
+  },
   address: {
         type: String
   },
   status: {
     type: Boolean,
-    default: false
+    default: true
   }
 });
 

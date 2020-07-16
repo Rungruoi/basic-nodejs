@@ -2,6 +2,30 @@ const express = require('express');
 const router = express.Router();
 const Employee = require('../model/employee');
 const { sendWelcome } = require('../mails/config')
+const  multer  = require('multer')
+const path = require('path')
+
+let storage = multer.diskStorage({
+  destination: function(req, file, callback) {
+    callback(null, './src/public/image/')
+  },
+  filename: function(req, file, callback) {
+    callback(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname))
+  }
+})
+
+const upload = multer({storage: storage})
+
+router.get('/avatar/:id',  async (req, res, next) => {
+  const employee = await Employee.findById(req.params.id);
+  res.render('avatar', {employee})
+})
+
+router.post('/avatar/:id', upload.single('avatar'), async(req, res, next) => {
+  const { id } = req.params;
+  await Employee.update({_id: id}, {avatar: req.file.filename});
+  res.redirect('back');
+})
 
 router.get('/', async (req, res) => {
   const resPerPage = 5; // results per page
@@ -69,6 +93,5 @@ router.get('/delete/:id', async (req, res, next) => {
   await Employee.remove({_id: id});
   res.redirect('/');
 });
-
 
 module.exports = router;
